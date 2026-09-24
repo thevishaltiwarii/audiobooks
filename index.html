@@ -27,7 +27,6 @@
     body { background-color: var(--bg-main); color: var(--text-main); -webkit-tap-highlight-color: transparent; }
 
     #app { max-width: 500px; margin: 0 auto; height: 100vh; height: 100dvh; overflow: hidden; position: relative; display: flex; flex-direction: column; }
-
     .view { display: none; height: 100%; flex-direction: column; overflow-y: auto; overflow-x: hidden; }
     .view.active { display: flex; }
 
@@ -38,14 +37,12 @@
        LIBRARY VIEW
        ========================================== */
     #library-view { padding: 16px; padding-bottom: 100px; }
-    
     .search-container { background: var(--bg-search); border-radius: 24px; display: flex; align-items: center; padding: 12px 16px; margin-bottom: 24px; margin-top: 8px; }
     .search-container input { flex: 1; background: transparent; border: none; color: var(--text-main); font-size: 1rem; margin-left: 12px; outline: none; }
     .search-container input::placeholder { color: var(--text-muted); }
     .icon-btn-small { color: var(--accent); padding: 4px; border-radius: 50%; }
 
     .section-title { font-size: 1.25rem; font-weight: 500; margin-bottom: 16px; margin-top: 16px; }
-
     .current-list { display: flex; overflow-x: auto; gap: 16px; padding-bottom: 8px; scrollbar-width: none; }
     .current-list::-webkit-scrollbar { display: none; }
     .grid-list { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -56,7 +53,6 @@
     .card-cover { width: 100%; aspect-ratio: 1; border-radius: 12px; object-fit: cover; background: #333; margin-bottom: 12px; }
     .card-title { font-size: 1rem; font-weight: 500; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 8px; line-height: 1.3; padding-right: 24px; }
     
-    /* 3 Dots Edit Button */
     .btn-edit-book { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.6); border-radius: 50%; width: 28px; height: 28px; padding: 4px; color: white; z-index: 2; }
     
     .card-meta { display: flex; justify-content: space-between; color: var(--text-muted); font-size: 0.8rem; margin-top: auto; margin-bottom: 8px; align-items: center; }
@@ -70,9 +66,8 @@
        PLAYER VIEW
        ========================================== */
     #player-view { padding: 16px; justify-content: space-between; }
-    
     .player-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-    .header-icons { display: flex; gap: 16px; color: var(--text-main); align-items: center; }
+    .header-icons { display: flex; gap: 20px; color: var(--text-main); align-items: center; }
     
     .player-title-container { width: 100%; overflow: hidden; white-space: nowrap; margin-bottom: 24px; display: flex; flex-direction: column; align-items: center; }
     .player-title { font-size: 1.3rem; font-weight: 500; display: inline-block; margin-bottom: 4px;}
@@ -82,10 +77,17 @@
     .player-cover-container { display: flex; justify-content: center; margin-bottom: 32px; flex: 1; align-items: center; }
     .player-cover { width: 100%; max-width: 300px; aspect-ratio: 1; border-radius: 24px; object-fit: cover; background: #222; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
 
+    /* Custom Timeline with Visual Splits */
     .progress-container { display: flex; align-items: center; gap: 16px; margin-bottom: 48px; font-size: 0.9rem; color: var(--text-muted); }
-    input[type=range] { -webkit-appearance: none; flex: 1; background: transparent; height: 24px; outline: none; }
-    input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; background: var(--progress-bg); border-radius: 2px; }
-    input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 4px; background: var(--accent); border-radius: 2px; margin-top: -8px; cursor: pointer; }
+    .timeline-stack { position: relative; flex: 1; height: 24px; display: flex; align-items: center; }
+    .timeline-track { position: absolute; width: 100%; height: 4px; background: var(--progress-bg); border-radius: 2px; }
+    .timeline-fill { position: absolute; width: 0%; height: 4px; background: var(--accent); border-radius: 2px; }
+    .timeline-markers { position: absolute; width: 100%; height: 4px; display: flex; pointer-events: none; }
+    .timeline-marker { position: absolute; width: 3px; height: 100%; background: var(--bg-main); transform: translateX(-50%); }
+    
+    input[type=range] { -webkit-appearance: none; appearance: none; position: absolute; width: 100%; height: 24px; background: transparent; z-index: 10; cursor: pointer; outline: none; margin: 0; }
+    input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 4px; background: var(--accent); border-radius: 2px; }
+    input[type=range]::-webkit-slider-runnable-track { background: transparent; border: none; }
 
     .controls { display: flex; align-items: center; justify-content: center; gap: 40px; margin-bottom: 24px; }
     .control-btn { color: var(--text-main); }
@@ -95,7 +97,7 @@
     .play-btn.paused svg { margin-left: 0; }
 
     /* ==========================================
-       MODALS & TRAYS
+       MODALS, TRAYS & SHEETS
        ========================================== */
     .modal { position: absolute; inset: 0; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; padding: 24px; z-index: 100; }
     .modal.hidden { display: none; }
@@ -108,9 +110,23 @@
     .primary-btn { background: var(--accent); color: var(--accent-dark); padding: 12px 24px; border-radius: 12px; font-weight: bold; }
     .danger-btn { color: var(--error); margin-right: auto; padding: 12px 0; font-weight: bold;}
 
-    /* Speed Tray */
-    .bottom-sheet { background: var(--bg-card); padding: 24px; border-radius: 24px 24px 0 0; width: 100%; max-width: 500px; position: absolute; bottom: 0; display: flex; flex-direction: column; gap: 16px; }
-    .speed-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; max-height: 50vh; overflow-y: auto; padding-bottom: 24px; }
+    .bottom-sheet { background: var(--bg-card); padding: 24px; border-radius: 24px 24px 0 0; width: 100%; max-width: 500px; position: absolute; bottom: 0; display: flex; flex-direction: column; gap: 16px; max-height: 80vh; }
+    
+    /* Chapters List Styling (Matches Screenshot 3) */
+    .chapter-list-container { overflow-y: auto; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+    .chapter-item { display: flex; align-items: center; padding: 16px; border-radius: 12px; cursor: pointer; color: var(--text-main); }
+    .chapter-item.active { background: #9db2f5; color: #000; }
+    .chapter-item .idx { width: 40px; font-weight: 500; opacity: 0.6; }
+    .chapter-item.active .idx { opacity: 0.8; }
+    .chapter-item .title { flex: 1; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .chapter-item .len { font-size: 0.9rem; opacity: 0.8; text-align: right; margin-left: 12px; }
+
+    /* Parts Manager Styling */
+    .part-list-container { overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; max-height: 40vh;}
+    .part-item { background: var(--bg-search); padding: 12px 16px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; }
+    .part-item.active { border: 1px solid var(--accent); }
+    
+    .speed-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding-bottom: 24px; }
     .speed-btn { background: var(--bg-search); padding: 16px 0; border-radius: 12px; font-weight: 500; }
     .speed-btn.active { background: var(--accent); color: var(--accent-dark); }
   </style>
@@ -123,7 +139,6 @@
          LIBRARY VIEW
          ========================================== -->
     <main id="library-view" class="view active">
-      
       <div class="search-container">
         <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
         <input type="text" id="search-input" placeholder="Search audiobooks...">
@@ -152,24 +167,38 @@
           <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
         <div class="header-icons">
+          <!-- Parts List Icon -->
+          <button id="btn-open-parts">
+            <svg viewBox="0 0 24 24"><path d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5 1.5-.68 1.5-1.5-.67-1.5-1.5-1.5zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z"/></svg>
+          </button>
+          <!-- Bookmark / Chapters Icon -->
+          <button id="btn-open-chapters">
+            <svg viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+          </button>
           <!-- Speed Tray Trigger -->
-          <button id="btn-open-speed" style="color: var(--accent); font-size: 1.1rem; font-weight: bold; width: 40px; height: 24px;">1.0x</button>
+          <button id="btn-open-speed" style="color: var(--accent); font-size: 1.1rem; font-weight: bold; width: 40px;">1.0x</button>
         </div>
       </div>
 
       <div class="player-title-container">
         <h2 id="player-title" class="player-title">Book Title</h2>
         <span id="player-part-indicator" class="player-part-indicator"></span>
-        <span id="player-status" class="player-status"></span> <!-- Status Buffering Info -->
+        <span id="player-status" class="player-status"></span>
       </div>
 
       <div class="player-cover-container">
-        <img id="player-cover" class="player-cover" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Cover">
+        <img id="player-cover" class="player-cover" src="" alt="Cover">
       </div>
 
+      <!-- Advanced Timeline with Visual Chapter Splitting -->
       <div class="progress-container">
         <span id="time-current">0:00</span>
-        <input type="range" id="seek-bar" value="0" min="0" max="100" step="0.1">
+        <div class="timeline-stack">
+          <div class="timeline-track"></div>
+          <div id="timeline-fill" class="timeline-fill"></div>
+          <div id="timeline-markers" class="timeline-markers"></div>
+          <input type="range" id="seek-bar" value="0" min="0" max="100" step="0.1">
+        </div>
         <span id="time-total">0:00</span>
       </div>
 
@@ -188,18 +217,15 @@
     </main>
 
     <!-- ==========================================
-         ADD / EDIT BOOK MODAL
+         1. ADD / EDIT BOOK MODAL
          ========================================== -->
     <div id="add-modal" class="modal hidden">
       <div class="modal-content">
         <h2 id="modal-title-text">Add Audiobook</h2>
-        <textarea id="input-urls" rows="4" placeholder="Dropbox Audio URLs (One per line)"></textarea>
-        <input type="text" id="input-title" placeholder="Title (Req)">
-        <input type="text" id="input-cover" placeholder="Cover Image URL (Optional)">
-        
-        <!-- Hidden input for tracking if we are editing an existing book -->
+        <input type="url" id="input-url" placeholder="Dropbox Audio URL (Required)">
+        <input type="text" id="input-title" placeholder="Title (Required)">
+        <input type="url" id="input-cover" placeholder="Cover Image URL (Optional)">
         <input type="hidden" id="edit-book-id" value="">
-
         <div class="modal-actions">
           <button id="btn-delete-edit" class="danger-btn hidden">Delete</button>
           <button id="btn-cancel-add" class="text-btn">Cancel</button>
@@ -209,14 +235,57 @@
     </div>
 
     <!-- ==========================================
-         SPEED TRAY MODAL
+         2. MANAGE PARTS (FILES) MODAL
+         ========================================== -->
+    <div id="parts-modal" class="modal hidden" style="align-items: flex-end; padding: 0;">
+      <div class="bottom-sheet">
+        <h3 style="text-align: center; margin-bottom: 8px;">Manage Parts</h3>
+        <div id="parts-list" class="part-list-container"></div>
+        
+        <h4 style="margin-top:16px;">Add New Part</h4>
+        <input type="url" id="new-part-url" placeholder="Next Dropbox Audio URL">
+        <input type="text" id="new-part-title" placeholder="Title (e.g. Part 2)">
+        <button id="btn-add-part" class="primary-btn" style="width: 100%;">Add Part</button>
+        <button class="text-btn" id="btn-close-parts" style="width: 100%; margin-top: 8px;">Done</button>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         3. CHAPTERS (TIMESTAMPS) MODAL
+         ========================================== -->
+    <div id="chapters-modal" class="modal hidden" style="align-items: flex-end; padding: 0;">
+      <div class="bottom-sheet" style="height: 80vh;">
+        <h3 style="text-align: center; margin-bottom: 8px;">Chapters</h3>
+        <div id="chapters-list" class="chapter-list-container">
+          <!-- Chapters injected here -->
+        </div>
+        <button class="primary-btn" id="btn-edit-chapters-text" style="width: 100%; margin-top: 8px;">Edit Descriptions & Timestamps</button>
+        <button class="text-btn" id="btn-close-chapters" style="width: 100%;">Close</button>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         4. EDIT TIMESTAMPS TEXT MODAL
+         ========================================== -->
+    <div id="timestamps-editor-modal" class="modal hidden">
+      <div class="modal-content">
+        <h2>YouTube Description / Timestamps</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">Paste timestamps (e.g., "00:00 Intro")</p>
+        <textarea id="input-timestamps" rows="10" placeholder="00:00 Intro&#10;30:00 Chapter 1&#10;45:00 Chapter 2"></textarea>
+        <div class="modal-actions">
+          <button id="btn-cancel-timestamps" class="text-btn">Cancel</button>
+          <button id="btn-save-timestamps" class="primary-btn">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         5. SPEED TRAY MODAL
          ========================================== -->
     <div id="speed-modal" class="modal hidden" style="align-items: flex-end; padding: 0;">
       <div class="bottom-sheet">
         <h3 style="text-align: center; margin-bottom: 8px;">Playback Speed</h3>
-        <div id="speed-grid" class="speed-grid">
-          <!-- Speeds injected via JS -->
-        </div>
+        <div id="speed-grid" class="speed-grid"></div>
         <button class="text-btn" id="btn-close-speed" style="width: 100%;">Close</button>
       </div>
     </div>
@@ -228,8 +297,9 @@
        ========================================== -->
   <script>
     const DB_NAME = 'AudiobookDB';
-    const DB_VERSION = 3;
+    const DB_VERSION = 4; // Bumped to 4 for Timestamp support
     const STORE_NAME = 'books';
+    const DEFAULT_COVER = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMzMzMiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiM2NjYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj7wn4OoPC90ZXh0Pjwvc3ZnPg==';
 
     const DB = {
       db: null,
@@ -251,7 +321,20 @@
           const tx = this.db.transaction(STORE_NAME, 'readonly');
           const store = tx.objectStore(STORE_NAME);
           const req = store.getAll();
-          req.onsuccess = () => resolve(req.result || []);
+          req.onsuccess = () => {
+            // Automatic Migration logic for older versions without proper objects
+            let books = (req.result || []).map(book => {
+              if (book.parts && typeof book.parts[0] === 'string') {
+                book.parts = book.parts.map((p, i) => ({ url: p, title: 'Part ' + (i+1), timestampsText: '', chapters: [] }));
+              }
+              if (!book.parts) {
+                book.parts = [{ url: book.dropboxUrl, title: 'Part 1', timestampsText: '', chapters: [] }];
+                book.currentPartIndex = 0;
+              }
+              return book;
+            });
+            resolve(books);
+          };
         });
       },
       async save(book) {
@@ -284,17 +367,15 @@
     // Modals
     const modal = document.getElementById('add-modal');
     const speedModal = document.getElementById('speed-modal');
+    const partsModal = document.getElementById('parts-modal');
+    const chaptersModal = document.getElementById('chapters-modal');
+    const timestampsEditorModal = document.getElementById('timestamps-editor-modal');
     
     const fabButton = document.getElementById('btn-show-add-fab');
     const btnPlayPause = document.getElementById('btn-play-pause');
-    const iconPlay = document.getElementById('icon-play');
-    const iconPause = document.getElementById('icon-pause');
     const seekBar = document.getElementById('seek-bar');
-    const timeCurrent = document.getElementById('time-current');
-    const timeTotal = document.getElementById('time-total');
-    const speedBtnTrigger = document.getElementById('btn-open-speed');
-    const searchInput = document.getElementById('search-input');
-    const partIndicator = document.getElementById('player-part-indicator');
+    const timelineFill = document.getElementById('timeline-fill');
+    const timelineMarkers = document.getElementById('timeline-markers');
     const statusIndicator = document.getElementById('player-status');
 
     async function initApp() {
@@ -326,7 +407,7 @@
     }
 
     function updateSeekBarUI(percentage) {
-      seekBar.style.background = `linear-gradient(to right, var(--accent) ${percentage}%, var(--progress-bg) ${percentage}%)`;
+      timelineFill.style.width = `${percentage}%`;
     }
 
     async function renderLibrary(searchQuery = '') {
@@ -334,23 +415,17 @@
       if (searchQuery) books = books.filter(b => b.title.toLowerCase().includes(searchQuery.toLowerCase()));
       books.sort((a, b) => b.lastPlayedAt - a.lastPlayedAt);
       
-      let currentHTML = '';
-      let notStartedHTML = '';
+      let currentHTML = '', notStartedHTML = '';
 
       books.forEach(book => {
         const pct = book.duration ? Math.min(100, (book.position / book.duration) * 100) : 0;
-        const coverSrc = book.coverUrl || 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMzMzMiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiM2NjYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj7wn4OoPC90ZXh0Pjwvc3ZnPg==';
-        
-        const isMultiPart = book.parts && book.parts.length > 1;
+        const coverSrc = book.coverUrl || DEFAULT_COVER;
+        const isMultiPart = book.parts.length > 1;
         const partIndex = book.currentPartIndex || 0;
         const partBadge = isMultiPart ? `<span class="part-badge">Pt ${partIndex + 1}/${book.parts.length}</span>` : '';
-        
-        // Ensure duration is shown properly. If duration exists, format it.
         const durationText = book.duration ? formatTime(book.duration) : '';
 
-        // Shared Three Dots Edit Button
-        const editBtn = `
-          <button class="btn-edit-book" onclick="openEditModal(event, '${book.id}')">
+        const editBtn = `<button class="btn-edit-book" onclick="openEditModal(event, '${book.id}')">
             <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
           </button>`;
 
@@ -360,39 +435,31 @@
               ${editBtn}
               <img class="card-cover" src="${coverSrc}" alt="Cover">
               <div class="card-title">${book.title}</div>
-              <div class="card-meta">
-                <span>${Math.round(pct)}% • ${durationText}</span>
-                ${partBadge}
-              </div>
+              <div class="card-meta"><span>${Math.round(pct)}% • ${durationText}</span>${partBadge}</div>
               <div class="card-progress-track"><div class="card-progress-fill" style="width: ${pct}%"></div></div>
-            </div>
-          `;
+            </div>`;
         } else {
           notStartedHTML += `
             <div class="book-card" onclick="openPlayer('${book.id}')">
               ${editBtn}
               <img class="card-cover" src="${coverSrc}" alt="Cover">
               <div class="card-title">${book.title}</div>
-              <div class="card-meta">
-                <span style="font-size: 0.75rem">${isMultiPart ? book.parts.length + ' Parts' : 'Not started'}</span>
-              </div>
-            </div>
-          `;
+              <div class="card-meta"><span style="font-size: 0.75rem">${isMultiPart ? book.parts.length + ' Parts' : 'Not started'}</span></div>
+            </div>`;
         }
       });
-
       currentListEl.innerHTML = currentHTML || '<p style="color:var(--text-muted); font-size:0.9rem;">No active books.</p>';
       notStartedListEl.innerHTML = notStartedHTML || '<p style="color:var(--text-muted); font-size:0.9rem;">Empty.</p>';
     }
 
     async function openEditModal(event, id) {
-      event.stopPropagation(); // Prevent opening the player
+      event.stopPropagation();
       const books = await DB.getAll();
       const bookToEdit = books.find(b => b.id === id);
       if(!bookToEdit) return;
 
       document.getElementById('modal-title-text').innerText = "Edit Audiobook";
-      document.getElementById('input-urls').value = bookToEdit.parts ? bookToEdit.parts.join('\n') : bookToEdit.dropboxUrl;
+      document.getElementById('input-url').value = bookToEdit.parts[0].url; // Only edit primary URL here
       document.getElementById('input-title').value = bookToEdit.title;
       document.getElementById('input-cover').value = bookToEdit.coverUrl || '';
       document.getElementById('edit-book-id').value = bookToEdit.id;
@@ -406,21 +473,16 @@
       currentBook = books.find(b => b.id === id);
       if (!currentBook) return;
       
-      if (!currentBook.parts) {
-        currentBook.parts = [currentBook.dropboxUrl];
-        currentBook.currentPartIndex = 0;
-      }
-      
       document.getElementById('player-title').innerText = currentBook.title;
-      document.getElementById('player-cover').src = currentBook.coverUrl || 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMzMzMiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiM2NjYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj7wn4OoPC90ZXh0Pjwvc3ZnPg==';
+      document.getElementById('player-cover').src = currentBook.coverUrl || DEFAULT_COVER;
       
       updatePartIndicatorUI();
       
       audio.playbackRate = currentBook.playbackRate || 1;
-      speedBtnTrigger.innerText = Number(audio.playbackRate).toFixed(1) + 'x';
+      document.getElementById('btn-open-speed').innerText = Number(audio.playbackRate).toFixed(1) + 'x';
       
-      const urlToStream = currentBook.parts[currentBook.currentPartIndex];
-      attachAudioStream(urlToStream, currentBook.position);
+      const currentPart = currentBook.parts[currentBook.currentPartIndex];
+      attachAudioStream(currentPart.url, currentBook.position);
       
       views.library.classList.remove('active');
       views.player.classList.add('active');
@@ -428,25 +490,41 @@
     }
 
     function updatePartIndicatorUI() {
-      if (currentBook.parts.length > 1) {
-        partIndicator.innerText = `Part ${currentBook.currentPartIndex + 1} of ${currentBook.parts.length}`;
+      const cp = currentBook.parts[currentBook.currentPartIndex];
+      let title = cp.title || `Part ${currentBook.currentPartIndex + 1}`;
+      
+      // Calculate Active Chapter based on Timestamps
+      let activeChapterText = "";
+      if (cp.chapters && cp.chapters.length > 0) {
+         let activeChap = cp.chapters[0];
+         for (let i = cp.chapters.length - 1; i >= 0; i--) {
+            if (audio.currentTime >= cp.chapters[i].time) {
+               activeChap = cp.chapters[i]; break;
+            }
+         }
+         activeChapterText = ` • ${activeChap.title}`;
+      }
+
+      if (currentBook.parts.length > 1 || activeChapterText) {
+        document.getElementById('player-part-indicator').innerText = `${title}${activeChapterText}`;
       } else {
-        partIndicator.innerText = "";
+        document.getElementById('player-part-indicator').innerText = "";
       }
     }
 
     function attachAudioStream(url, position) {
       statusIndicator.innerText = "Connecting...";
       audio.src = url;
-      audio.preload = 'metadata'; // Keeps data usage low natively
+      audio.preload = 'metadata'; 
       audio.currentTime = position || 0;
       audio.load();
+      drawTimelineMarkers();
     }
 
     function togglePlay() {
       if (!currentBook) return;
       if (!audio.src || audio.src === window.location.href) {
-        attachAudioStream(currentBook.parts[currentBook.currentPartIndex], currentBook.position);
+        attachAudioStream(currentBook.parts[currentBook.currentPartIndex].url, currentBook.position);
       }
       if (audio.paused) audio.play();
       else audio.pause();
@@ -456,6 +534,8 @@
       if (!currentBook) return;
       audio.currentTime = (seekBar.value / 100) * audio.duration;
       updateSeekBarUI(seekBar.value);
+      updatePartIndicatorUI();
+      if(!chaptersModal.classList.contains('hidden')) renderChapterList();
       saveProgress();
     }
 
@@ -466,9 +546,113 @@
       currentBook.lastPlayedAt = Date.now();
       
       clearTimeout(saveDebounceTimer);
-      saveDebounceTimer = setTimeout(() => {
-        DB.save(currentBook);
-      }, 3000);
+      saveDebounceTimer = setTimeout(() => { DB.save(currentBook); }, 3000);
+    }
+
+    // --- TIMESTAMPS / CHAPTERS LOGIC ---
+    function parseChapters(text) {
+      if (!text) return [];
+      const chapters = [];
+      const lines = text.split('\n');
+      for (const line of lines) {
+         // Matches MM:SS or HH:MM:SS followed by text
+         const match = line.match(/^(?:(?:(\d{1,2}):)?(\d{1,2}):)(\d{2})\s+(.*)$/);
+         if (match) {
+             const h = parseInt(match[1] || '0');
+             const m = parseInt(match[2]);
+             const s = parseInt(match[3]);
+             const title = match[4].trim();
+             chapters.push({ time: h*3600 + m*60 + s, title });
+         }
+      }
+      return chapters.sort((a,b) => a.time - b.time);
+    }
+
+    function calculateChapterLengths(chapters, totalDuration) {
+      for (let i = 0; i < chapters.length; i++) {
+         let end = (i < chapters.length - 1) ? chapters[i+1].time : (totalDuration || chapters[i].time);
+         chapters[i].length = Math.max(0, end - chapters[i].time);
+      }
+    }
+
+    function drawTimelineMarkers() {
+      timelineMarkers.innerHTML = '';
+      const cp = currentBook.parts[currentBook.currentPartIndex];
+      if (!cp.chapters || !cp.chapters.length || !audio.duration) return;
+
+      cp.chapters.forEach(chap => {
+         if (chap.time === 0) return; // Ignore very first marker
+         const pct = (chap.time / audio.duration) * 100;
+         timelineMarkers.innerHTML += `<div class="timeline-marker" style="left:${pct}%;"></div>`;
+      });
+    }
+
+    function renderChapterList() {
+      const container = document.getElementById('chapters-list');
+      const cp = currentBook.parts[currentBook.currentPartIndex];
+      
+      if (!cp.chapters || cp.chapters.length === 0) {
+         container.innerHTML = `<p style="text-align:center; margin-top: 32px; color:var(--text-muted);">No chapters found.<br>Click below to paste timestamps.</p>`;
+         return;
+      }
+
+      calculateChapterLengths(cp.chapters, audio.duration);
+
+      let html = '';
+      cp.chapters.forEach((chap, i) => {
+         // Determine if active
+         let isActive = false;
+         if (audio.currentTime >= chap.time) {
+            if (i === cp.chapters.length - 1 || audio.currentTime < cp.chapters[i+1].time) {
+               isActive = true;
+            }
+         }
+         
+         // Format length based on user requirement (time between this and next)
+         let lenStr = formatTime(chap.length);
+
+         html += `
+          <div class="chapter-item ${isActive ? 'active' : ''}" onclick="window.seekToTime(${chap.time})">
+            <span class="idx">${i + 1}</span>
+            <span class="title">${chap.title}</span>
+            <span class="len">${lenStr}</span>
+          </div>`;
+      });
+      container.innerHTML = html;
+    }
+
+    window.seekToTime = function(sec) {
+      audio.currentTime = sec;
+      chaptersModal.classList.add('hidden');
+      updatePartIndicatorUI();
+    }
+
+    // --- PARTS MANAGER LOGIC ---
+    function renderPartsList() {
+      const container = document.getElementById('parts-list');
+      let html = '';
+      currentBook.parts.forEach((part, i) => {
+        const isActive = (i === currentBook.currentPartIndex);
+        html += `
+          <div class="part-item ${isActive ? 'active' : ''}">
+            <div style="flex:1; overflow:hidden;">
+              <div style="font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${part.title}</div>
+              <div style="font-size:0.75rem; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${part.url}</div>
+            </div>
+            ${!isActive ? `<button style="color:var(--error); margin-left:12px;" onclick="window.deletePart(${i})">Delete</button>` : `<span style="color:var(--accent); font-size:0.8rem; margin-left:12px;">Active</span>`}
+          </div>`;
+      });
+      container.innerHTML = html;
+    }
+
+    window.deletePart = async function(idx) {
+      if (confirm("Delete this part?")) {
+        currentBook.parts.splice(idx, 1);
+        if (currentBook.currentPartIndex >= currentBook.parts.length) currentBook.currentPartIndex = 0;
+        await DB.save(currentBook);
+        renderPartsList();
+        updatePartIndicatorUI();
+      }
     }
 
     // --- SPEED TRAY LOGIC ---
@@ -481,33 +665,31 @@
       }
       grid.innerHTML = html;
     }
-
     window.setSpeed = function(val) {
       if (currentBook) {
         currentBook.playbackRate = val;
         audio.playbackRate = val;
-        speedBtnTrigger.innerText = val.toFixed(1) + 'x';
+        document.getElementById('btn-open-speed').innerText = val.toFixed(1) + 'x';
         DB.save(currentBook);
       }
       speedModal.classList.add('hidden');
     }
-
     function updateSpeedTrayUI() {
       const btns = document.querySelectorAll('.speed-btn');
       btns.forEach(b => {
-        if (b.innerText === speedBtnTrigger.innerText) b.classList.add('active');
+        if (b.innerText === document.getElementById('btn-open-speed').innerText) b.classList.add('active');
         else b.classList.remove('active');
       });
     }
 
     // --- SETUP LISTENERS ---
     function setupListeners() {
-      searchInput.addEventListener('input', (e) => renderLibrary(e.target.value));
+      document.getElementById('search-input').addEventListener('input', (e) => renderLibrary(e.target.value));
 
-      // Add Modal (Open as "New")
+      // Add/Edit Book Modal
       const openAddModal = () => {
         document.getElementById('modal-title-text').innerText = "Add Audiobook";
-        document.getElementById('input-urls').value = '';
+        document.getElementById('input-url').value = '';
         document.getElementById('input-title').value = '';
         document.getElementById('input-cover').value = '';
         document.getElementById('edit-book-id').value = '';
@@ -519,63 +701,100 @@
       fabButton.addEventListener('click', openAddModal);
       document.getElementById('btn-cancel-add').addEventListener('click', () => modal.classList.add('hidden'));
       
-      // Save / Edit Logic
       document.getElementById('btn-save-add').onclick = async () => {
-        const urlsText = document.getElementById('input-urls').value.trim();
+        const url = document.getElementById('input-url').value.trim();
         const title = document.getElementById('input-title').value.trim();
         const cover = document.getElementById('input-cover').value.trim();
         const editId = document.getElementById('edit-book-id').value;
         
-        if (!urlsText || !title) return alert('URLs and Title are required.');
-        
-        const rawUrls = urlsText.split('\n').map(u => u.trim()).filter(u => u.length > 0);
-        const processedUrls = rawUrls.map(normalizeDropboxUrl);
+        if (!url || !title) return alert('URL and Title are required.');
+        const normalized = normalizeDropboxUrl(url);
         
         if (editId) {
-          // Edit Existing
           const books = await DB.getAll();
           let book = books.find(b => b.id === editId);
           book.title = title;
           book.coverUrl = cover;
-          book.parts = processedUrls;
+          book.parts[0].url = normalized; // update first part
           await DB.save(book);
         } else {
-          // Add New
           const newBook = {
             id: 'book_' + Date.now(),
             title, coverUrl: cover,
-            parts: processedUrls,
-            currentPartIndex: 0,
-            position: 0, duration: 0,
-            playbackRate: 1,
-            createdAt: Date.now(),
-            lastPlayedAt: Date.now()
+            parts: [{ url: normalized, title: 'Part 1', timestampsText: '', chapters: [] }],
+            currentPartIndex: 0, position: 0, duration: 0, playbackRate: 1,
+            createdAt: Date.now(), lastPlayedAt: Date.now()
           };
           await DB.save(newBook);
         }
-
         modal.classList.add('hidden');
         renderLibrary();
       };
 
-      // Delete from Edit Modal
       document.getElementById('btn-delete-edit').onclick = async () => {
         const editId = document.getElementById('edit-book-id').value;
-        if (confirm("Permanently remove this audiobook from your local library?")) {
+        if (confirm("Permanently remove this audiobook?")) {
           await DB.delete(editId);
           modal.classList.add('hidden');
           renderLibrary();
         }
       };
 
-      // Speed Modal Triggers
-      speedBtnTrigger.addEventListener('click', () => {
+      // Parts Manager Modal
+      document.getElementById('btn-open-parts').addEventListener('click', () => {
+        renderPartsList();
+        partsModal.classList.remove('hidden');
+      });
+      document.getElementById('btn-close-parts').addEventListener('click', () => partsModal.classList.add('hidden'));
+      document.getElementById('btn-add-part').addEventListener('click', async () => {
+        const url = document.getElementById('new-part-url').value.trim();
+        let pTitle = document.getElementById('new-part-title').value.trim();
+        if (!url) return alert('Part URL is required.');
+        if (!pTitle) pTitle = `Part ${currentBook.parts.length + 1}`;
+        
+        currentBook.parts.push({ url: normalizeDropboxUrl(url), title: pTitle, timestampsText: '', chapters: [] });
+        await DB.save(currentBook);
+        document.getElementById('new-part-url').value = '';
+        document.getElementById('new-part-title').value = '';
+        renderPartsList();
+        updatePartIndicatorUI();
+      });
+
+      // Chapters Modal
+      document.getElementById('btn-open-chapters').addEventListener('click', () => {
+        renderChapterList();
+        chaptersModal.classList.remove('hidden');
+      });
+      document.getElementById('btn-close-chapters').addEventListener('click', () => chaptersModal.classList.add('hidden'));
+      
+      document.getElementById('btn-edit-chapters-text').addEventListener('click', () => {
+        const cp = currentBook.parts[currentBook.currentPartIndex];
+        document.getElementById('input-timestamps').value = cp.timestampsText || '';
+        chaptersModal.classList.add('hidden');
+        timestampsEditorModal.classList.remove('hidden');
+      });
+      
+      document.getElementById('btn-cancel-timestamps').addEventListener('click', () => timestampsEditorModal.classList.add('hidden'));
+      document.getElementById('btn-save-timestamps').addEventListener('click', async () => {
+        const text = document.getElementById('input-timestamps').value;
+        const cp = currentBook.parts[currentBook.currentPartIndex];
+        cp.timestampsText = text;
+        cp.chapters = parseChapters(text);
+        await DB.save(currentBook);
+        
+        timestampsEditorModal.classList.add('hidden');
+        drawTimelineMarkers();
+        updatePartIndicatorUI();
+      });
+
+      // Speed Modal
+      document.getElementById('btn-open-speed').addEventListener('click', () => {
         updateSpeedTrayUI();
         speedModal.classList.remove('hidden');
       });
       document.getElementById('btn-close-speed').addEventListener('click', () => speedModal.classList.add('hidden'));
 
-      // Player Back Button
+      // Player Controls
       document.getElementById('btn-back').onclick = () => {
         saveProgress();
         views.player.classList.remove('active');
@@ -583,14 +802,12 @@
         fabButton.classList.remove('hidden');
         renderLibrary();
       };
-
-      // Controls
       btnPlayPause.onclick = togglePlay;
       document.getElementById('btn-skip-back').onclick = () => { audio.currentTime = Math.max(0, audio.currentTime - 15); };
       document.getElementById('btn-skip-fwd').onclick = () => { audio.currentTime = Math.min(audio.duration, audio.currentTime + 30); };
       seekBar.oninput = seekUpdate;
 
-      // --- AUDIO EVENT LISTENERS (STATUS INDICATION) ---
+      // Audio Events (Status & Continuity)
       audio.addEventListener('loadstart', () => statusIndicator.innerText = "Retrieving audio...");
       audio.addEventListener('waiting', () => statusIndicator.innerText = "Buffering...");
       audio.addEventListener('canplay', () => statusIndicator.innerText = "");
@@ -605,14 +822,18 @@
           currentBook.duration = 0;
           
           updatePartIndicatorUI();
-          attachAudioStream(currentBook.parts[currentBook.currentPartIndex], 0);
+          attachAudioStream(currentBook.parts[currentBook.currentPartIndex].url, 0);
           audio.play();
           DB.save(currentBook);
         } else {
-          btnPlayPause.classList.add('paused');
+          btnPlayPause.classList.remove('paused');
           iconPlay.style.display = 'block';
           iconPause.style.display = 'none';
         }
+      });
+
+      audio.addEventListener('loadedmetadata', () => {
+         drawTimelineMarkers(); // Draw markers once we know the exact duration
       });
 
       audio.addEventListener('timeupdate', () => {
@@ -623,18 +844,19 @@
         const pct = (audio.currentTime / audio.duration) * 100;
         seekBar.value = pct;
         updateSeekBarUI(pct);
+        updatePartIndicatorUI(); // Keep active chapter updated
         saveProgress();
       });
 
       audio.addEventListener('play', () => {
-        btnPlayPause.classList.remove('paused');
+        btnPlayPause.classList.add('paused');
         iconPlay.style.display = 'none';
         iconPause.style.display = 'block';
         clearTimeout(networkSeverTimer);
       });
 
       audio.addEventListener('pause', () => {
-        btnPlayPause.classList.add('paused');
+        btnPlayPause.classList.remove('paused');
         iconPlay.style.display = 'block';
         iconPause.style.display = 'none';
         saveProgress();
