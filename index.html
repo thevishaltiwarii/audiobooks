@@ -72,7 +72,7 @@
     .player-title-container { width: 100%; overflow: hidden; white-space: nowrap; margin-bottom: 24px; display: flex; flex-direction: column; align-items: center; }
     .player-title { font-size: 1.3rem; font-weight: 500; display: inline-block; margin-bottom: 4px;}
     .player-part-indicator { font-size: 0.9rem; color: var(--accent); font-weight: 500; margin-bottom: 4px;}
-    .player-status { font-size: 0.85rem; color: var(--text-muted); height: 16px; font-style: italic; }
+    .player-status { font-size: 0.85rem; color: var(--accent); height: 16px; font-style: italic; opacity: 0.8; }
 
     .player-cover-container { display: flex; justify-content: center; margin-bottom: 32px; flex: 1; align-items: center; }
     .player-cover { width: 100%; max-width: 300px; aspect-ratio: 1; border-radius: 24px; object-fit: cover; background: #222; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
@@ -112,7 +112,6 @@
 
     .bottom-sheet { background: var(--bg-card); padding: 24px; border-radius: 24px 24px 0 0; width: 100%; max-width: 500px; position: absolute; bottom: 0; display: flex; flex-direction: column; gap: 16px; max-height: 80vh; }
     
-    /* Chapters List Styling (Matches Screenshot 3) */
     .chapter-list-container { overflow-y: auto; display: flex; flex-direction: column; gap: 8px; flex: 1; }
     .chapter-item { display: flex; align-items: center; padding: 16px; border-radius: 12px; cursor: pointer; color: var(--text-main); }
     .chapter-item.active { background: #9db2f5; color: #000; }
@@ -121,7 +120,6 @@
     .chapter-item .title { flex: 1; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .chapter-item .len { font-size: 0.9rem; opacity: 0.8; text-align: right; margin-left: 12px; }
 
-    /* Parts Manager Styling */
     .part-list-container { overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; max-height: 40vh;}
     .part-item { background: var(--bg-search); padding: 12px 16px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; }
     .part-item.active { border: 1px solid var(--accent); }
@@ -129,6 +127,9 @@
     .speed-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding-bottom: 24px; }
     .speed-btn { background: var(--bg-search); padding: 16px 0; border-radius: 12px; font-weight: 500; }
     .speed-btn.active { background: var(--accent); color: var(--accent-dark); }
+    .stat-row{display:grid;grid-template-columns:70px 1fr auto;gap:12px;align-items:center;padding:10px 4px}
+    .stat-bar{height:8px;background:var(--progress-bg);border-radius:4px;overflow:hidden}
+    .stat-bar>div{height:100%;background:var(--accent)}
   </style>
 </head>
 <body>
@@ -142,6 +143,7 @@
       <div class="search-container">
         <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
         <input type="text" id="search-input" placeholder="Search audiobooks...">
+        <button class="icon-btn-small" id="btn-stats"><svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg></button>
         <button class="icon-btn-small" id="btn-show-add-top">
           <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
         </button>
@@ -167,15 +169,12 @@
           <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
         <div class="header-icons">
-          <!-- Parts List Icon -->
           <button id="btn-open-parts">
             <svg viewBox="0 0 24 24"><path d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5 1.5-.68 1.5-1.5-.67-1.5-1.5-1.5zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z"/></svg>
           </button>
-          <!-- Bookmark / Chapters Icon -->
           <button id="btn-open-chapters">
             <svg viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
           </button>
-          <!-- Speed Tray Trigger -->
           <button id="btn-open-speed" style="color: var(--accent); font-size: 1.1rem; font-weight: bold; width: 40px;">1.0x</button>
         </div>
       </div>
@@ -190,7 +189,6 @@
         <img id="player-cover" class="player-cover" src="" alt="Cover">
       </div>
 
-      <!-- Advanced Timeline with Visual Chapter Splitting -->
       <div class="progress-container">
         <span id="time-current">0:00</span>
         <div class="timeline-stack">
@@ -280,8 +278,16 @@
     </div>
 
     <!-- ==========================================
-         5. SPEED TRAY MODAL
+         5. SPEED TRAY MODAL & STATS MODAL
          ========================================== -->
+    <div id="stats-modal" class="modal hidden" style="align-items: flex-end; padding: 0;">
+      <div class="bottom-sheet">
+        <h3 style="text-align: center; margin-bottom: 8px;">Listening Stats</h3>
+        <div id="stats-list" class="chapter-list-container"></div>
+        <button class="text-btn" id="btn-close-stats" style="width: 100%;">Close</button>
+      </div>
+    </div>
+
     <div id="speed-modal" class="modal hidden" style="align-items: flex-end; padding: 0;">
       <div class="bottom-sheet">
         <h3 style="text-align: center; margin-bottom: 8px;">Playback Speed</h3>
@@ -297,7 +303,7 @@
        ========================================== -->
   <script>
     const DB_NAME = 'AudiobookDB';
-    const DB_VERSION = 4; // Bumped to 4 for Timestamp support
+    const DB_VERSION = 4;
     const STORE_NAME = 'books';
     const DEFAULT_COVER = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMzMzMiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiM2NjYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj7wn4OoPC90ZXh0Pjwvc3ZnPg==';
 
@@ -322,7 +328,6 @@
           const store = tx.objectStore(STORE_NAME);
           const req = store.getAll();
           req.onsuccess = () => {
-            // Automatic Migration logic for older versions without proper objects
             let books = (req.result || []).map(book => {
               if (book.parts && typeof book.parts[0] === 'string') {
                 book.parts = book.parts.map((p, i) => ({ url: p, title: 'Part ' + (i+1), timestampsText: '', chapters: [] }));
@@ -377,6 +382,10 @@
     const timelineFill = document.getElementById('timeline-fill');
     const timelineMarkers = document.getElementById('timeline-markers');
     const statusIndicator = document.getElementById('player-status');
+    const iconPlay = document.getElementById('icon-play');
+    const iconPause = document.getElementById('icon-pause');
+    const timeCurrent = document.getElementById('time-current');
+    const timeTotal = document.getElementById('time-total');
 
     async function initApp() {
       await DB.init();
@@ -386,11 +395,15 @@
       updateSeekBarUI(0);
     }
 
+    // UPDATED: Converts Dropbox domains to Direct CDN domains to bypass CORS failures
     function normalizeDropboxUrl(url) {
       try {
-        const u = new URL(url);
-        u.searchParams.set('raw', '1');
+        let u = new URL(url);
+        if (u.hostname === 'www.dropbox.com' || u.hostname === 'dropbox.com') {
+          u.hostname = 'dl.dropboxusercontent.com'; // Directly serves byte-ranges with CORS
+        }
         u.searchParams.delete('dl');
+        u.searchParams.delete('raw');
         return u.toString();
       } catch(e) {
         return url;
@@ -459,7 +472,7 @@
       if(!bookToEdit) return;
 
       document.getElementById('modal-title-text').innerText = "Edit Audiobook";
-      document.getElementById('input-url').value = bookToEdit.parts[0].url; // Only edit primary URL here
+      document.getElementById('input-url').value = bookToEdit.parts[0].url;
       document.getElementById('input-title').value = bookToEdit.title;
       document.getElementById('input-cover').value = bookToEdit.coverUrl || '';
       document.getElementById('edit-book-id').value = bookToEdit.id;
@@ -493,7 +506,6 @@
       const cp = currentBook.parts[currentBook.currentPartIndex];
       let title = cp.title || `Part ${currentBook.currentPartIndex + 1}`;
       
-      // Calculate Active Chapter based on Timestamps
       let activeChapterText = "";
       if (cp.chapters && cp.chapters.length > 0) {
          let activeChap = cp.chapters[0];
@@ -512,19 +524,339 @@
       }
     }
 
-    function attachAudioStream(url, position) {
+// ---- M4B → fragmented MP4 on the fly ----
+const M4B = (() => {
+  const u32 = (d, o) => ((d[o] << 24) | (d[o + 1] << 16) | (d[o + 2] << 8) | d[o + 3]) >>> 0;
+  const u64 = (d, o) => u32(d, o) * 4294967296 + u32(d, o + 4);
+  const tag = (d, o) => String.fromCharCode(d[o], d[o + 1], d[o + 2], d[o + 3]);
+
+  function* boxes(d, s, e) {
+    let p = s;
+    while (p + 8 <= e) {
+      let size = u32(d, p), hdr = 8;
+      const type = tag(d, p + 4);
+      if (size === 1) { size = u64(d, p + 8); hdr = 16; }
+      else if (size === 0) size = e - p;
+      if (size < hdr || p + size > e) return;
+      yield { type, start: p, body: p + hdr, end: p + size };
+      p += size;
+    }
+  }
+  const child = (d, b, type) => { for (const c of boxes(d, b.body, b.end)) if (c.type === type) return c; return null; };
+  const path = (d, b, ...types) => { let c = b; for (const t of types) { c = c && child(d, c, t); } return c; };
+
+  // UPDATED: No longer depends on file size to locate moov
+  async function locateMoov(fetchRange) {
+    let p = 0, hops = 0;
+    while (hops++ < 64) {
+      const h = await fetchRange(p, p + 16 - 1);
+      if (h.length < 8) return null; // EOF
+      let sz = u32(h, 0), hdr = 8;
+      const type = tag(h, 4);
+      if (sz === 1) { sz = u64(h, 8); hdr = 16; } else if (sz === 0) sz = Infinity;
+      if (sz < hdr) return null;
+      if (type === 'moov') return { start: p, size: sz };
+      p += sz;
+      if (sz === Infinity) return null;
+    }
+    return null;
+  }
+
+  function parseMoov(d) {
+    const moov = boxes(d, 0, d.length).next().value;
+    if (!moov || moov.type !== 'moov') throw new Error('no moov');
+    for (const trak of boxes(d, moov.body, moov.end)) {
+      if (trak.type !== 'trak') continue;
+      const mdia = child(d, trak, 'mdia'); if (!mdia) continue;
+      const hdlr = child(d, mdia, 'hdlr');
+      if (!hdlr || tag(d, hdlr.body + 8) !== 'soun') continue;
+      const mdhd = child(d, mdia, 'mdhd'), tkhd = child(d, trak, 'tkhd');
+      const stbl = path(d, mdia, 'minf', 'stbl'); if (!stbl) continue;
+      const stsd = child(d, stbl, 'stsd'), stts = child(d, stbl, 'stts'), stsc = child(d, stbl, 'stsc'),
+            stsz = child(d, stbl, 'stsz'), stco = child(d, stbl, 'stco'), co64 = child(d, stbl, 'co64');
+      if (!stsd || !stts || !stsc || !stsz || !(stco || co64)) continue;
+      const mdhdV = d[mdhd.body];
+      const timescale = mdhdV === 1 ? u32(d, mdhd.body + 20) : u32(d, mdhd.body + 12);
+      const trackId = u32(d, tkhd.body + (d[tkhd.body] === 1 ? 20 : 12));
+
+      const fixed = u32(d, stsz.body + 4), n = u32(d, stsz.body + 8);
+      const sizes = new Uint32Array(n);
+      for (let i = 0; i < n; i++) sizes[i] = fixed || u32(d, stsz.body + 12 + i * 4);
+      const dur = new Uint32Array(n);
+      { let k = 0; const c = u32(d, stts.body + 4);
+        for (let i = 0; i < c; i++) { const cnt = u32(d, stts.body + 8 + i * 8), dl = u32(d, stts.body + 12 + i * 8);
+          for (let j = 0; j < cnt && k < n; j++) dur[k++] = dl; } }
+      const co = co64 || stco, cn = u32(d, co.body + 4), chunk = new Array(cn);
+      for (let i = 0; i < cn; i++) chunk[i] = co64 ? u64(d, co.body + 8 + i * 8) : u32(d, co.body + 8 + i * 4);
+      const sc = u32(d, stsc.body + 4), entries = [];
+      for (let i = 0; i < sc; i++) entries.push([u32(d, stsc.body + 8 + i * 12), u32(d, stsc.body + 12 + i * 12)]);
+      const offs = new Array(n); let s = 0;
+      for (let i = 0; i < entries.length; i++) {
+        const first = entries[i][0], per = entries[i][1], last = i + 1 < entries.length ? entries[i + 1][0] - 1 : cn;
+        for (let c = first; c <= last; c++) { let o = chunk[c - 1];
+          for (let j = 0; j < per && s < n; j++) { offs[s] = o; o += sizes[s]; s++; } }
+      }
+      const start = new Float64Array(n + 1);
+      for (let i = 0; i < n; i++) start[i + 1] = start[i] + dur[i];
+
+      const entry = stsd.body + 8; 
+      const esds = (() => { const e = { start: entry, body: entry + 8, end: entry + u32(d, entry) };
+        for (const c of boxes(d, e.body + 28, e.end)) if (c.type === 'esds') return c; return null; })();
+      let codec = 'mp4a.40.2';
+      if (esds) { const b = d.subarray(esds.body + 4, esds.end);
+        for (let i = 0; i < b.length - 4; i++) if (b[i] === 0x05) { let q = i + 1; while (b[q] & 0x80) q++; q++;
+          let aot = b[q] >> 3; codec = 'mp4a.40.' + aot; break; } }
+      const sampleEntry = d.slice(entry, entry + u32(d, entry));
+      return { timescale, trackId, n, sizes, offs, start, dur, sampleEntry, codec,
+               duration: start[n] / timescale, chan: 2 };
+    }
+    throw new Error('no audio track');
+  }
+
+  const enc = new TextEncoder();
+  function box(type, ...parts) {
+    let len = 8; for (const p of parts) len += p.length;
+    const out = new Uint8Array(len); out[0] = len >>> 24; out[1] = len >>> 16; out[2] = len >>> 8; out[3] = len;
+    out.set(enc.encode(type), 4); let o = 8; for (const p of parts) { out.set(p, o); o += p.length; } return out;
+  }
+  const be32 = (...v) => { const o = new Uint8Array(v.length * 4); v.forEach((x, i) => { o[i*4] = x >>> 24; o[i*4+1] = x >>> 16; o[i*4+2] = x >>> 8; o[i*4+3] = x; }); return o; };
+  const fullbox = (type, ver, flags, ...parts) => box(type, new Uint8Array([ver, flags >> 16, flags >> 8, flags]), ...parts);
+
+  function initSegment(t) {
+    const matrix = be32(0x10000, 0, 0, 0, 0x10000, 0, 0, 0, 0x40000000);
+    const mvhd = fullbox('mvhd', 0, 0, be32(0, 0, t.timescale, 0, 0x10000), new Uint8Array([1, 0, 0, 0, 0, 0, 0, 0, 0, 0]), new Uint8Array(8), matrix, new Uint8Array(24), be32(t.trackId + 1));
+    const tkhd = fullbox('tkhd', 0, 3, be32(0, 0, t.trackId, 0, 0), new Uint8Array(8), new Uint8Array([0, 0, 0, 0, 1, 0, 0, 0]), matrix, be32(0, 0));
+    const mdhd = fullbox('mdhd', 0, 0, be32(0, 0, t.timescale, 0), new Uint8Array([0x55, 0xc4, 0, 0]));
+    const hdlr = fullbox('hdlr', 0, 0, be32(0), enc.encode('soun'), new Uint8Array(12), enc.encode('Sound\0'));
+    const dinf = box('dinf', fullbox('dref', 0, 0, be32(1), fullbox('url ', 0, 1)));
+    const stbl = box('stbl', fullbox('stsd', 0, 0, be32(1), t.sampleEntry), fullbox('stts', 0, 0, be32(0)), fullbox('stsc', 0, 0, be32(0)), fullbox('stsz', 0, 0, be32(0, 0)), fullbox('stco', 0, 0, be32(0)));
+    const minf = box('minf', fullbox('smhd', 0, 0, new Uint8Array(4)), dinf, stbl);
+    const trak = box('trak', tkhd, box('mdia', mdhd, hdlr, minf));
+    const trex = fullbox('trex', 0, 0, be32(t.trackId, 1, 0, 0, 0));
+    const ftyp = box('ftyp', enc.encode('isom'), be32(512), enc.encode('isomiso5mp41'));
+    return concat([ftyp, box('moov', mvhd, trak, box('mvex', trex))]);
+  }
+  const concat = (arr) => { let n = 0; for (const a of arr) n += a.length; const o = new Uint8Array(n); let p = 0; for (const a of arr) { o.set(a, p); p += a.length; } return o; };
+
+  function fragment(t, seq, i, j, data) {
+    const cnt = j - i;
+    const trun = new Uint8Array(12 + cnt * 8); 
+    const tv = new DataView(trun.buffer);
+    trun[0] = 0; trun[1] = 0; trun[2] = 3; trun[3] = 1;
+    tv.setUint32(4, cnt);
+    const mfhd = fullbox('mfhd', 0, 0, be32(seq));
+    const tfhd = fullbox('tfhd', 0, 0x020000, be32(t.trackId)); 
+    const tfdt = fullbox('tfdt', 1, 0, new Uint8Array(8)); const dv = new DataView(tfdt.buffer); dv.setUint32(12, Math.floor(t.start[i] / 4294967296)); dv.setUint32(16, t.start[i] >>> 0);
+    for (let k = 0; k < cnt; k++) { tv.setUint32(12 + k * 8, t.dur[i + k]); tv.setUint32(16 + k * 8, t.sizes[i + k]); }
+    const moofLen = 8 + mfhd.length + 8 + tfhd.length + tfdt.length + 8 + trun.length;
+    tv.setUint32(8, moofLen + 8); 
+    const trunBox = box('trun', trun);
+    const moof = box('moof', mfhd, box('traf', tfhd, tfdt, trunBox));
+    return concat([moof, box('mdat', data)]);
+  }
+
+  function sampleAt(t, sec) {
+    const target = sec * t.timescale; let lo = 0, hi = t.n - 1;
+    while (lo < hi) { const m = (lo + hi) >> 1; if (t.start[m + 1] <= target) lo = m + 1; else hi = m; }
+    return lo;
+  }
+  function span(t, i, seconds, maxBytes) {
+    let j = i, bytes = 0, tm = 0;
+    while (j < t.n && tm < seconds * t.timescale && bytes + t.sizes[j] <= maxBytes) { bytes += t.sizes[j]; tm += t.dur[j]; j++; }
+    if (j === i && j < t.n) j = i + 1; 
+    return { j, bytes, first: t.offs[i], last: t.offs[j - 1] + t.sizes[j - 1] };
+  }
+  return { locateMoov, parseMoov, initSegment, fragment, sampleAt, span };
+})();
+
+    const IdxCache = {
+      open(){ return new Promise((res,rej)=>{ const r=indexedDB.open('AudiobookIdx',1); r.onupgradeneeded=()=>r.result.createObjectStore('i'); r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error); }); },
+      async get(k){ try{ const db=await this.open(); return await new Promise(res=>{ const q=db.transaction('i').objectStore('i').get(k); q.onsuccess=()=>res(q.result||null); q.onerror=()=>res(null); }); }catch(e){ return null; } },
+      async put(k,v){ try{ const db=await this.open(); await new Promise(res=>{ const tx=db.transaction('i','readwrite'); tx.objectStore('i').put(v,k); tx.oncomplete=tx.onerror=()=>res(); }); }catch(e){} }
+    };
+
+    // ---- SMART STREAM ----
+    const Smart = {
+      on:false, ms:null, sb:null, url:'', size:0, kind:'', off:0, gen:0, p:null, ctrl:null, spent:[], seq:1,
+      id3:0, kbps:0, t:null, si:0, moovBytes:0, failReason:"",
+      LOOK:30, MAXMIN: 1.5 * 1024 * 1024, MIN_AHEAD: 3, 
+      
+      async rng(a,b,sig){
+        const r=await fetch(this.url,{headers:{Range:`bytes=${a}-${b}`},signal:sig});
+        if(r.status===416) return new Uint8Array(0); // EOF
+        if(r.status!==206) throw new Error('Range requests blocked by server CORS');
+        const cr=r.headers.get('Content-Range'); if(cr) this.size=+cr.split('/')[1]||this.size;
+        const d=new Uint8Array(await r.arrayBuffer()); this.spent.push({t:Date.now(),n:d.length}); return d;
+      },
+      idle(){ return new Promise(r=>{ if(!this.sb||!this.sb.updating) r(); else this.sb.addEventListener('updateend',r,{once:true}); }); },
+      inBuf(t){ if(!this.sb) return false; const b=this.sb.buffered; for(let i=0;i<b.length;i++) if(b.start(i)<=t+1&&b.end(i)>=t) return true; return false; },
+      
+      end() {
+        if (!this.sb) return audio.currentTime;
+        const t = audio.currentTime;
+        const b = this.sb.buffered;
+        let farthest = t;
+        for (let i = 0; i < b.length; i++) {
+          if (b.start(i) <= farthest + 2) { 
+            farthest = Math.max(farthest, b.end(i));
+          }
+        }
+        return farthest;
+      },
+      
+      used(){ const n=Date.now(); this.spent=this.spent.filter(x=>n-x.t<60000); return this.spent.reduce((a,x)=>a+x.n,0); },
+
+      async probe(){ 
+        try {
+          const h=await this.rng(0,15);
+          if(h[0]==73&&h[1]==68&&h[2]==51){ 
+            const id3=10+((h[6]&127)<<21|(h[7]&127)<<14|(h[8]&127)<<7|(h[9]&127));
+            const f=await this.rng(id3,id3+63);
+            if(f[0]!==255||(f[1]&224)!==224||((f[1]>>1)&3)!==1) throw new Error("Invalid MP3 sync");
+            if(String.fromCharCode(...f.slice(4,64)).includes('Xing')) throw new Error("VBR MP3s unsupported");
+            const kb=((f[1]>>3)&3)===3?[0,32,40,48,56,64,80,96,112,128,160,192,224,256,320,0][f[2]>>4]:[0,8,16,24,32,40,48,56,64,80,96,112,128,144,160,0][f[2]>>4];
+            if(!kb) throw new Error("Unknown bitrate");
+            this.kind='mp3'; this.id3=id3; this.kbps=kb;
+            return {mime:'audio/mpeg', duration:(this.size-id3)*8/(kb*1000)};
+          }
+          if(String.fromCharCode(h[4],h[5],h[6],h[7])==='ftyp'){ 
+            const key=this.url.split('?')[0]+'|m4b'; 
+            let t=await IdxCache.get(key);
+            if(t){ statusIndicator.innerText='Index cached - connecting...'; }
+            else{
+              statusIndicator.innerText='Reading book index (one-time)...';
+              const loc=await M4B.locateMoov((a,b)=>this.rng(a,b)); 
+              if(!loc) throw new Error("moov index not found");
+              const moov=await this.rng(loc.start,loc.start+loc.size-1); 
+              this.moovBytes=loc.size;
+              t=M4B.parseMoov(moov);
+              t.offs=Float64Array.from(t.offs); IdxCache.put(key,t);
+            }
+            this.t=t; this.kind='mp4';
+            
+            let finalMime = null;
+            const mimeStrict=`audio/mp4; codecs="${t.codec}"`;
+            if (window.MediaSource && MediaSource.isTypeSupported(mimeStrict)) finalMime = mimeStrict;
+            else if (window.MediaSource && MediaSource.isTypeSupported('audio/mp4')) finalMime = 'audio/mp4';
+            
+            if (!finalMime) throw new Error("Codec rejected by phone");
+            return {mime: finalMime, duration: t.duration};
+          }
+          throw new Error("File is not MP3 or M4B");
+        } catch (e) {
+          this.failReason = e.message;
+          return null;
+        }
+      },
+      async start(url,pos){
+        this.stop();
+        if(!window.MediaSource) { this.failReason = "MediaSource not supported"; return false; }
+        try{
+          this.url=url; this.size=0; this.spent=[]; this.seq=1; this.kind=''; this.failReason="";
+          const pr=await this.probe(); if(!pr||!pr.mime) return false;
+          this.ms=new MediaSource(); audio.src=URL.createObjectURL(this.ms);
+          await new Promise(r=>this.ms.addEventListener('sourceopen',r,{once:true}));
+          this.sb=this.ms.addSourceBuffer(pr.mime);
+          if (pr.duration && pr.duration !== Infinity) this.ms.duration = pr.duration;
+          this.on=true;
+          if(this.kind==='mp4'){ this.sb.mode='segments'; this.sb.appendBuffer(M4B.initSegment(this.t)); await this.idle(); }
+          this.at(pos); audio.currentTime=pos;
+          this.pump(); return true;
+        }catch(e){ this.failReason = "Stream crash: " + e.message; this.stop(); return false; }
+      },
+      at(t){
+        if(this.kind==='mp3'){ this.off=Math.min(this.size,this.id3+Math.floor(t*this.kbps*125)); this.sb.timestampOffset=t; }
+        else this.si=M4B.sampleAt(this.t,t);
+      },
+      done(){ return this.kind==='mp3' ? this.off>=this.size : this.si>=this.t.n; },
+      pump(){ if(this.on&&!this.p) this.p=this.run().finally(()=>this.p=null); },
+      
+      async run(){
+        const g=this.gen;
+        try{
+          while(this.on&&g===this.gen&&!this.done()){
+            const ahead=this.end()-audio.currentTime;
+            
+            if(ahead>=this.LOOK) {
+               statusIndicator.innerText = 'Smart Saver Active';
+               break; 
+            }
+            
+            statusIndicator.innerText = `Fetching chunk...`;
+            const want=Math.min(this.LOOK-ahead+2, 15);            
+            const bytesNeeded = this.kind==='mp3' ? Math.ceil(want*this.kbps*125) : M4B.span(this.t,this.si,want,this.MAXMIN).bytes;
+            if(this.used()+bytesNeeded>this.MAXMIN && ahead>this.MIN_AHEAD) {
+               statusIndicator.innerText = 'Smart Saver Active';
+               break;  
+            }
+            
+            this.ctrl=new AbortController(); let seg;
+            if(this.kind==='mp3'){
+              const a=this.off, e=Math.min(this.size,a+bytesNeeded)-1;
+              seg=await this.rng(a,e,this.ctrl.signal); if(g!==this.gen) break; this.off=e+1;
+            }else{
+              const sp=M4B.span(this.t,this.si,want,this.MAXMIN);
+              const data=await this.rng(sp.first,sp.last-1,this.ctrl.signal); if(g!==this.gen) break;
+              seg=M4B.fragment(this.t,this.seq++,this.si,sp.j,data); this.si=sp.j;
+            }
+            await this.idle();
+            if(audio.currentTime>30){ try{ this.sb.remove(0,audio.currentTime-15); await this.idle(); }catch(e){} } 
+            this.sb.appendBuffer(seg); await this.idle();
+          }
+          if(this.on&&g===this.gen&&this.done()&&this.ms.readyState==='open'&&!this.sb.updating) this.ms.endOfStream();
+        }catch(e){ if(e&&e.name!=='AbortError'&&this.on) statusIndicator.innerText='Network error - will retry'; }
+      },
+      async reseek(t){
+        const g=++this.gen; if(this.ctrl) this.ctrl.abort();
+        if(this.p) await this.p; await this.idle();
+        if(g!==this.gen||!this.on) return;
+        try{ this.sb.abort(); }catch(e){}
+        this.sb.remove(0,Infinity); await this.idle();
+        if(this.ms.readyState==='ended') { try{ this.ms.duration=this.ms.duration; }catch(e){} }
+        this.at(t); this.pump();
+      },
+      stop(){ this.on=false; this.gen++; if(this.ctrl) this.ctrl.abort(); if(audio.src&&audio.src.startsWith('blob:')) URL.revokeObjectURL(audio.src); this.ms=this.sb=this.t=null; }
+    };
+
+    const Stats = {
+      k:'abStats', last:null, acc:0,
+      data(){ try{ return JSON.parse(localStorage.getItem(this.k))||{}; }catch(e){ return {}; } },
+      tick(){ const t=audio.currentTime, d=t-(this.last??t); this.last=t; if(d>0&&d<2){ this.acc+=d; if(this.acc>=10) this.flush(); } },
+      flush(){
+        if(this.acc<=0) return;
+        const n=new Date(), m=n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0'), D=this.data();
+        D[m]=(D[m]||0)+this.acc; this.acc=0;
+        try{ localStorage.setItem(this.k,JSON.stringify(D)); }catch(e){}
+      },
+      show(){
+        this.flush();
+        const D=this.data(), ks=Object.keys(D).sort().reverse(), mx=Math.max(1,...Object.values(D));
+        document.getElementById('stats-list').innerHTML = ks.length ? ks.map(k=>{
+          const [y,m]=k.split('-'), v=D[k];
+          return `<div class="stat-row"><span>${new Date(y,m-1).toLocaleString(undefined,{month:'short',year:'numeric'})}</span><div class="stat-bar"><div style="width:${v/mx*100}%"></div></div><span>${Math.floor(v/3600)}h ${Math.floor(v%3600/60)}m</span></div>`;
+        }).join('') : '<p style="text-align:center;color:var(--text-muted);margin:24px 0;">Nothing yet. Start listening!</p>';
+      }
+    };
+
+    async function attachAudioStream(url, position) {
       statusIndicator.innerText = "Connecting...";
+      drawTimelineMarkers();
+      Smart.failReason = ""; // Clear old errors
+      
+      if (await Smart.start(url, position || 0)) return;
+      
+      // Fallback
       audio.src = url;
-      audio.preload = 'metadata'; 
+      audio.preload = 'metadata';
       audio.currentTime = position || 0;
       audio.load();
-      drawTimelineMarkers();
+      statusIndicator.innerText = "Native mode: " + (Smart.failReason || "Unknown error");
     }
 
-    function togglePlay() {
+    async function togglePlay() {
       if (!currentBook) return;
       if (!audio.src || audio.src === window.location.href) {
-        attachAudioStream(currentBook.parts[currentBook.currentPartIndex].url, currentBook.position);
+        await attachAudioStream(currentBook.parts[currentBook.currentPartIndex].url, currentBook.position);
       }
       if (audio.paused) audio.play();
       else audio.pause();
@@ -555,7 +887,6 @@
       const chapters = [];
       const lines = text.split('\n');
       for (const line of lines) {
-         // Matches MM:SS or HH:MM:SS followed by text
          const match = line.match(/^(?:(?:(\d{1,2}):)?(\d{1,2}):)(\d{2})\s+(.*)$/);
          if (match) {
              const h = parseInt(match[1] || '0');
@@ -581,7 +912,7 @@
       if (!cp.chapters || !cp.chapters.length || !audio.duration) return;
 
       cp.chapters.forEach(chap => {
-         if (chap.time === 0) return; // Ignore very first marker
+         if (chap.time === 0) return; 
          const pct = (chap.time / audio.duration) * 100;
          timelineMarkers.innerHTML += `<div class="timeline-marker" style="left:${pct}%;"></div>`;
       });
@@ -600,15 +931,12 @@
 
       let html = '';
       cp.chapters.forEach((chap, i) => {
-         // Determine if active
          let isActive = false;
          if (audio.currentTime >= chap.time) {
             if (i === cp.chapters.length - 1 || audio.currentTime < cp.chapters[i+1].time) {
                isActive = true;
             }
          }
-         
-         // Format length based on user requirement (time between this and next)
          let lenStr = formatTime(chap.length);
 
          html += `
@@ -686,7 +1014,6 @@
     function setupListeners() {
       document.getElementById('search-input').addEventListener('input', (e) => renderLibrary(e.target.value));
 
-      // Add/Edit Book Modal
       const openAddModal = () => {
         document.getElementById('modal-title-text').innerText = "Add Audiobook";
         document.getElementById('input-url').value = '';
@@ -715,7 +1042,7 @@
           let book = books.find(b => b.id === editId);
           book.title = title;
           book.coverUrl = cover;
-          book.parts[0].url = normalized; // update first part
+          book.parts[0].url = normalized; 
           await DB.save(book);
         } else {
           const newBook = {
@@ -740,7 +1067,6 @@
         }
       };
 
-      // Parts Manager Modal
       document.getElementById('btn-open-parts').addEventListener('click', () => {
         renderPartsList();
         partsModal.classList.remove('hidden');
@@ -760,7 +1086,6 @@
         updatePartIndicatorUI();
       });
 
-      // Chapters Modal
       document.getElementById('btn-open-chapters').addEventListener('click', () => {
         renderChapterList();
         chaptersModal.classList.remove('hidden');
@@ -787,14 +1112,12 @@
         updatePartIndicatorUI();
       });
 
-      // Speed Modal
       document.getElementById('btn-open-speed').addEventListener('click', () => {
         updateSpeedTrayUI();
         speedModal.classList.remove('hidden');
       });
       document.getElementById('btn-close-speed').addEventListener('click', () => speedModal.classList.add('hidden'));
 
-      // Player Controls
       document.getElementById('btn-back').onclick = () => {
         saveProgress();
         views.player.classList.remove('active');
@@ -807,14 +1130,7 @@
       document.getElementById('btn-skip-fwd').onclick = () => { audio.currentTime = Math.min(audio.duration, audio.currentTime + 30); };
       seekBar.oninput = seekUpdate;
 
-      // Audio Events (Status & Continuity)
-      audio.addEventListener('loadstart', () => statusIndicator.innerText = "Retrieving audio...");
-      audio.addEventListener('waiting', () => statusIndicator.innerText = "Buffering...");
-      audio.addEventListener('canplay', () => statusIndicator.innerText = "");
-      audio.addEventListener('playing', () => statusIndicator.innerText = "");
-      audio.addEventListener('stalled', () => statusIndicator.innerText = "Connection unstable...");
-      audio.addEventListener('error', () => statusIndicator.innerText = "Error loading audio file.");
-
+      // Audio Events 
       audio.addEventListener('ended', () => {
         if (currentBook && currentBook.parts && currentBook.currentPartIndex < currentBook.parts.length - 1) {
           currentBook.currentPartIndex++;
@@ -822,8 +1138,7 @@
           currentBook.duration = 0;
           
           updatePartIndicatorUI();
-          attachAudioStream(currentBook.parts[currentBook.currentPartIndex].url, 0);
-          audio.play();
+          attachAudioStream(currentBook.parts[currentBook.currentPartIndex].url, 0).then(() => audio.play());
           DB.save(currentBook);
         } else {
           btnPlayPause.classList.remove('paused');
@@ -833,7 +1148,7 @@
       });
 
       audio.addEventListener('loadedmetadata', () => {
-         drawTimelineMarkers(); // Draw markers once we know the exact duration
+         drawTimelineMarkers(); 
       });
 
       audio.addEventListener('timeupdate', () => {
@@ -844,8 +1159,10 @@
         const pct = (audio.currentTime / audio.duration) * 100;
         seekBar.value = pct;
         updateSeekBarUI(pct);
-        updatePartIndicatorUI(); // Keep active chapter updated
+        updatePartIndicatorUI(); 
         saveProgress();
+        Stats.tick();
+        Smart.pump();
       });
 
       audio.addEventListener('play', () => {
@@ -863,13 +1180,22 @@
         
         clearTimeout(networkSeverTimer);
         networkSeverTimer = setTimeout(() => {
-          if (audio.paused && currentBook) {
+          if (audio.paused && currentBook && !Smart.on) {
             audio.removeAttribute('src'); 
             audio.load();
             statusIndicator.innerText = "Offline (Paused)";
           }
         }, 10000); 
       });
+
+      audio.addEventListener('seeking', () => {
+        Stats.last = null;
+        if (Smart.on && !Smart.inBuf(audio.currentTime)) Smart.reseek(audio.currentTime);
+      });
+      audio.addEventListener('pause', () => { Stats.flush(); Stats.last = null; });
+      audio.addEventListener('play', () => Smart.pump());
+      document.getElementById('btn-stats').onclick = () => { Stats.show(); document.getElementById('stats-modal').classList.remove('hidden'); };
+      document.getElementById('btn-close-stats').onclick = () => document.getElementById('stats-modal').classList.add('hidden');
 
       document.addEventListener("visibilitychange", () => {
         if (document.hidden && currentBook) saveProgress();
