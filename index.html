@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Audiobook Player</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#121212">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- App Container -->
+  <div id="app">
+    
+    <!-- Library View -->
+    <main id="library-view" class="view active">
+      <header>
+        <h1>My Audiobooks</h1>
+        <button id="btn-show-add" class="icon-btn">➕</button>
+      </header>
+      <div id="book-list" class="grid">
+        <!-- Books injected via JS -->
+      </div>
+    </main>
+
+    <!-- Player View -->
+    <main id="player-view" class="view">
+      <header>
+        <button id="btn-back" class="icon-btn">⬇ Library</button>
+        <button id="btn-speed" class="text-btn">1x</button>
+      </header>
+      
+      <div class="player-content">
+        <div class="cover-wrapper">
+          <div id="player-cover" class="default-cover">🎧</div>
+        </div>
+        <h2 id="player-title">Book Title</h2>
+        <h3 id="player-author">Author Name</h3>
+
+        <div class="progress-container">
+          <span id="time-current">00:00:00</span>
+          <input type="range" id="seek-bar" value="0" min="0" max="100" step="0.1">
+          <span id="time-total">00:00:00</span>
+        </div>
+
+        <div class="controls">
+          <button id="btn-skip-back" class="control-btn secondary">⏪ 15s</button>
+          <button id="btn-play-pause" class="control-btn primary">▶</button>
+          <button id="btn-skip-fwd" class="control-btn secondary">30s ⏩</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Add Book Modal -->
+    <div id="add-modal" class="modal hidden">
+      <div class="modal-content">
+        <h2>Add Audiobook</h2>
+        <input type="text" id="input-url" placeholder="Dropbox URL (Required)">
+        <input type="text" id="input-title" placeholder="Title (Required)">
+        <input type="text" id="input-author" placeholder="Author (Optional)">
+        <div class="modal-actions">
+          <button id="btn-cancel-add" class="text-btn">Cancel</button>
+          <button id="btn-save-add" class="primary-btn">Save</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="db.js"></script>
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
+</body>
+</html>
